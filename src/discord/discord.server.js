@@ -48,7 +48,7 @@ async function login() {
 async function sendMessageEveryone(message) {
   var res = {};
   await client.channels.fetch(process.env.CHANNEL_ID).then(async (ch) => {
-    await ch.send({ content: `@everyone\n ${message}` })
+    await ch.send({ content: `> @everyone\n ${message}` })
       .then((message) => {
         logger.info("DS MESSAGE", `Message '${message}', send on channel ${ch}.`);
         res = { message: true, status: `Message '${message}', send on channel ${ch}.` };
@@ -94,7 +94,7 @@ async function sendMessageBirthday(message, userId) {
             .setEmoji('🥳'),
         );
 
-      await ch.send({ content: `${mentionUser}, ${message}`, components: [row] })
+      await ch.send({ content: `> ${mentionUser}, ${message}`, components: [row] })
         .then((message) => {
           logger.info("DS MESSAGE", `Message 'tag:${userId}, user:${message}', send on channel ${ch}.`);
           res = { message: true, status: `Message 'tag:${userId}, user:${message}', send on channel ${ch}.` };
