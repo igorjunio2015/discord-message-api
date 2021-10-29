@@ -66,7 +66,30 @@ async function sendMessageEveryone(message) {
 async function sendMessageEndomarketing(message, channelId) {
   var res = {};
   await client.channels.fetch(channelId || process.env.CHANNEL_ID_ENDO).then(async (ch) => {
-    await ch.send({ content: `> @everyone\n> ${message}` })
+
+    const guildNw = await client.guilds.fetch(process.env.GUILD_ID);
+    var mensagemModificada = message;
+    var regex = /(\$)(.*)(\$)/;
+    var retirado = regex.exec(message);
+    var mentionUser;
+
+    while (retirado) {
+      await guildNw.members.fetch()
+        .then((m) => {
+          m.each(member => {
+            if (member.user.discriminator == retirado[2]) {
+              mentionUser = userMention(member.user.id);
+            }
+          })
+        })
+        .catch((err) => { console.log(err.message) });
+
+      mensagemModificada = mensagemModificada.replace(retirado[0], mentionUser)
+
+      retirado = regex.exec(mensagemModificada);
+    }
+
+    await ch.send({ content: `> @everyone\n> ${mensagemModificada}` })
       .then((message) => {
         logger.info("DS MESSAGE", `Message '${message}', send on channel ${ch}.`);
         res = { message: true, status: `Message '${message}', send on channel ${ch}.` };
@@ -74,6 +97,7 @@ async function sendMessageEndomarketing(message, channelId) {
       .catch((err) => {
         throw new Error(err);
       });
+
   }).catch((err) => {
     logger.error("DS MESSAGE", err);
     res = { message: false, status: err.message };
