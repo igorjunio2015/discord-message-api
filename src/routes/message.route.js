@@ -34,6 +34,10 @@ route.post("/v1/message/sendEndomarketing", checkMessageTextExists, async (req, 
   return res.status(200).json(retorno);
 })
 
+route.get("/v1/status", (req, res) => {
+  return res.status(200).json({ message: "Mantendo API online." })
+})
+
 function checkMessageTextExists(req, res, next) {
   const { message } = req.body;
 
