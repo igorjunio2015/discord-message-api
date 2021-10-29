@@ -27,6 +27,13 @@ route.post("/v1/message/sendMessageEveryone", checkMessageTextExists, async (req
   return res.status(200).json(retorno);
 })
 
+route.post("/v1/message/sendEndomarketing", checkMessageTextExists, async (req, res) => {
+  const { message, channelId } = req.body;
+  const retorno = await discordClient.sendMessageEndomarketing(message, channelId);
+
+  return res.status(200).json(retorno);
+})
+
 function checkMessageTextExists(req, res, next) {
   const { message } = req.body;
 

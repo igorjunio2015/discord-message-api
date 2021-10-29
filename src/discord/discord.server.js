@@ -63,6 +63,24 @@ async function sendMessageEveryone(message) {
   return res;
 }
 
+async function sendMessageEndomarketing(message, channelId) {
+  var res = {};
+  await client.channels.fetch(channelId || process.env.CHANNEL_ID_ENDO).then(async (ch) => {
+    await ch.send({ content: `> @everyone\n> ${message}` })
+      .then((message) => {
+        logger.info("DS MESSAGE", `Message '${message}', send on channel ${ch}.`);
+        res = { message: true, status: `Message '${message}', send on channel ${ch}.` };
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }).catch((err) => {
+    logger.error("DS MESSAGE", err);
+    res = { message: false, status: err.message };
+  });
+  return res;
+}
+
 async function sendMessageBirthday(message, userId) {
   var res = {};
   await client.channels.fetch(process.env.CHANNEL_ID).then(async (ch) => {
@@ -84,6 +102,8 @@ async function sendMessageBirthday(message, userId) {
         throw new Error(err.message)
       });
 
+    message = message.replace("$USER", mentionUser);
+
     if (mentionUser != undefined || mentionUser != null) {
       const row = new MessageActionRow()
         .addComponents(
@@ -94,7 +114,7 @@ async function sendMessageBirthday(message, userId) {
             .setEmoji('🥳'),
         );
 
-      await ch.send({ content: `> ${mentionUser}, ${message}`, components: [row] })
+      await ch.send({ content: `> ${message}`, components: [row] })
         .then((message) => {
           logger.info("DS MESSAGE", `Message 'tag:${userId}, user:${message}', send on channel ${ch}.`);
           res = { message: true, status: `Message 'tag:${userId}, user:${message}', send on channel ${ch}.` };
@@ -116,5 +136,6 @@ async function sendMessageBirthday(message, userId) {
 module.exports = {
   login,
   sendMessageBirthday,
-  sendMessageEveryone
+  sendMessageEveryone,
+  sendMessageEndomarketing
 };

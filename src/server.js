@@ -22,7 +22,7 @@ app.all("*", (req, res) => {
  * @CONFIG
  */
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 3333;
 
 app.listen(port, () => {
   logger.http("SERVER", "is started");
