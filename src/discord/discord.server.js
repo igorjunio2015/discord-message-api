@@ -13,20 +13,26 @@ const client = new Client({
 client.on('interactionCreate', async interaction => {
   if (!interaction.isButton()) return;
 
-  const user = interaction.message.content.split(",")[0].replace(/[^a-z0-9]/gi, "");
+  try {
+    const message = interaction.message.content//.split(",")[0].replace(/[^a-z0-9]/gi, "");
+    var regex = /(\<@)(.*)(\>)/;
+    var user = regex.exec(message)[2];
 
-  const row = new MessageActionRow()
-    .addComponents(
-      new MessageButton()
-        .setCustomId('aniversario')
-        .setLabel(`Deseje feliz aniversário ao ${(await client.users.fetch(user)).username.split(" ")[0]}.`)
-        .setStyle('SUCCESS')
-        .setEmoji('🥳'),
-    );
+    const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('aniversario')
+          .setLabel(`Deseje feliz aniversário ao ${(await client.users.fetch(user)).username.split(" ")[0]}.`)
+          .setStyle('SUCCESS')
+          .setEmoji('🥳'),
+      );
 
-  if (interaction.customId === 'aniversario') {
-    (await client.users.fetch(user)).send(`O colega **${interaction.user.username}** te deja muitos anos de vida 🥳.`);
-    await interaction.update({ components: [row] });
+    if (interaction.customId === 'aniversario') {
+      (await client.users.fetch(user)).send(`O colega **${interaction.user.username}** te deja muitos anos de vida 🥳.`);
+      await interaction.update({ components: [row] });
+    }
+  } catch (err) {
+    await interaction.update({ components: [] });
   }
 
 });
