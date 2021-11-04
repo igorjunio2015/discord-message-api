@@ -144,7 +144,7 @@ async function sendMessageBirthday(message, userId) {
             .setEmoji('🥳'),
         );
 
-      await ch.send({ content: `**Olá @everyone, hoje é dia de festa! ** \n\n> ${message}`, components: [row] })
+      await ch.send({ content: `*Olá @everyone, hoje é dia de festa! * \n\n> ${message}`, components: [row] })
         .then((message) => {
           logger.info("DS MESSAGE", `Message 'tag:${userId}, user:${message}', send on channel ${ch}.`);
           res = { message: true, status: `Message 'tag:${userId}, user:${message}', send on channel ${ch}.` };
