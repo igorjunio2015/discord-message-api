@@ -28,7 +28,7 @@ client.on('interactionCreate', async interaction => {
       );
 
     if (interaction.customId === 'aniversario') {
-      (await client.users.fetch(user)).send(`O colega **${interaction.user.username}** te deja muitos anos de vida 🥳.`);
+      (await client.users.fetch(user)).send(`O colega **${interaction.user.username}** te deseja muitos anos de vida 🥳.`);
       await interaction.update({ components: [row] });
     }
   } catch (err) {
@@ -144,7 +144,7 @@ async function sendMessageBirthday(message, userId) {
             .setEmoji('🥳'),
         );
 
-      await ch.send({ content: `> ${message}`, components: [row] })
+      await ch.send({ content: `**Olá @everyone, hoje é dia de festa! ** \n\n> ${message}`, components: [row] })
         .then((message) => {
           logger.info("DS MESSAGE", `Message 'tag:${userId}, user:${message}', send on channel ${ch}.`);
           res = { message: true, status: `Message 'tag:${userId}, user:${message}', send on channel ${ch}.` };
