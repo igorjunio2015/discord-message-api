@@ -139,7 +139,7 @@ async function sendMessageBirthday(message, userId) {
         .addComponents(
           new MessageButton()
             .setCustomId('aniversario')
-            .setLabel(`Deseje feliz aniversário ao ${(membroGuilda.user.username).split(" ")[0]}.`)
+            .setLabel(`Mande seus parabéns a ${(membroGuilda.user.username).split(" ")[0]}.`)
             .setStyle('SUCCESS')
             .setEmoji('🥳'),
         );
