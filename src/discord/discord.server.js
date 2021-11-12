@@ -2,6 +2,8 @@ const { Client, Intents, MessageActionRow, MessageButton, Interaction } = requir
 const { userMention } = require("@discordjs/builders");
 const logger = require("npmlog");
 
+const emojiAniversario = '<a:niver:908728918767439903>';
+
 const client = new Client({
   intents:
     [Intents.FLAGS.GUILDS
@@ -22,9 +24,9 @@ client.on('interactionCreate', async interaction => {
       .addComponents(
         new MessageButton()
           .setCustomId('aniversario')
-          .setLabel(`Deseje feliz aniversário ao ${(await client.users.fetch(user)).username.split(" ")[0]}.`)
+          .setLabel(`Mande seus parabéns a ${(await client.users.fetch(user)).username.split(" ")[0]}.`)
           .setStyle('SUCCESS')
-          .setEmoji('🥳'),
+          .setEmoji(emojiAniversario),
       );
 
     if (interaction.customId === 'aniversario') {
@@ -141,7 +143,7 @@ async function sendMessageBirthday(message, userId) {
             .setCustomId('aniversario')
             .setLabel(`Mande seus parabéns a ${(membroGuilda.user.username).split(" ")[0]}.`)
             .setStyle('SUCCESS')
-            .setEmoji('🥳'),
+            .setEmoji(emojiAniversario),
         );
 
       await ch.send({ content: `*Olá @everyone, hoje é dia de festa!* \n\n> ${message}`, components: [row] })
