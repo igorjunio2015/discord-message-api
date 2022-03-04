@@ -34,7 +34,7 @@ route.post("/v1/message/sendEndomarketing", checkMessageTextExists, async (req, 
   return res.status(200).json(retorno);
 })
 
-route.post("/v1/message/sendEndomarketingImage", checkMessageTextExists, async (req, res) => {
+route.post("/v1/message/sendEndomarketingImage", checkMessageTextExists, checkLinkImageExists, async (req, res) => {
   const { message, channelId, image } = req.body;
   const retorno = await discordClient.sendMessageEndomarketingImage(message, channelId, image);
 
