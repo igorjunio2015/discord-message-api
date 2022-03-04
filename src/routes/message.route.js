@@ -66,7 +66,7 @@ function checkUserIdExists(req, res, next) {
 function checkLinkImageExists(req, res, next) {
   const { image } = req.body;
 
-  if (!userId)
+  if (!image)
     return res.status(400).json({ message: "image not exists on body." })
 
   next();
