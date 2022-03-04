@@ -1,4 +1,4 @@
-const { Client, Intents, MessageActionRow, MessageButton, Interaction } = require("discord.js");
+const { Client, Intents, MessageActionRow, MessageButton, Interaction, MessageAttachment } = require("discord.js");
 const { userMention } = require("@discordjs/builders");
 const logger = require("npmlog");
 
@@ -113,6 +113,52 @@ async function sendMessageEndomarketing(message, channelId) {
   return res;
 }
 
+async function sendMessageEndomarketingImage(message, channelId, imageUrl) {
+  var res = {};
+  await client.channels.fetch(channelId || process.env.CHANNEL_ID_ENDO).then(async (ch) => {
+
+    const guildNw = await client.guilds.fetch(process.env.GUILD_ID);
+    var mensagemModificada = message;
+    var regex = /(\$)(.*)(\$)/;
+    var retirado = regex.exec(message);
+    var mentionUser;
+
+    while (retirado) {
+      await guildNw.members.fetch()
+        .then((m) => {
+          m.each(member => {
+            if (member.user.discriminator == retirado[2]) {
+              mentionUser = userMention(member.user.id);
+            }
+          })
+        })
+        .catch((err) => { console.log(err.message) });
+
+      mensagemModificada = mensagemModificada.replace(retirado[0], mentionUser)
+
+      retirado = regex.exec(mensagemModificada);
+    }
+
+    const attachment = new MessageAttachment(imageUrl);
+    
+    await ch.send({ content: `> @everyone\n> ${mensagemModificada}`, files: [attachment] })
+      .then((message) => {
+        logger.info("DS MESSAGE", `Message '${message}', send on channel ${ch}.`);
+        res = { message: true, status: `Message '${message}', send on channel ${ch}.` };
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+  }).catch((err) => {
+    logger.error("DS MESSAGE", err);
+    res = { message: false, status: err.message };
+  });
+  return res;
+}
+
+// https://media.discordapp.net/attachments/865222721842970644/949308657533878352/2022-03-03-life-dia-da-mulher-digitais_convite-lives.png?width=1040&height=1039
+
 async function sendMessageBirthday(message, userId) {
   var res = {};
   await client.channels.fetch(process.env.CHANNEL_ID).then(async (ch) => {
@@ -169,5 +215,6 @@ module.exports = {
   login,
   sendMessageBirthday,
   sendMessageEveryone,
-  sendMessageEndomarketing
+  sendMessageEndomarketing,
+  sendMessageEndomarketingImage
 };

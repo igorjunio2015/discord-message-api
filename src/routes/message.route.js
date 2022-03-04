@@ -34,6 +34,13 @@ route.post("/v1/message/sendEndomarketing", checkMessageTextExists, async (req, 
   return res.status(200).json(retorno);
 })
 
+route.post("/v1/message/sendEndomarketingImage", checkMessageTextExists, async (req, res) => {
+  const { message, channelId, image } = req.body;
+  const retorno = await discordClient.sendMessageEndomarketingImage(message, channelId, image);
+
+  return res.status(200).json(retorno);
+})
+
 route.get("/v1/status", (req, res) => {
   return res.status(200).json({ message: "Mantendo API online." })
 })
@@ -52,6 +59,15 @@ function checkUserIdExists(req, res, next) {
 
   if (!userId)
     return res.status(400).json({ message: "userId not exists on body." })
+
+  next();
+}
+
+function checkLinkImageExists(req, res, next) {
+  const { image } = req.body;
+
+  if (!userId)
+    return res.status(400).json({ message: "image not exists on body." })
 
   next();
 }
