@@ -140,8 +140,8 @@ async function sendMessageEndomarketingImage(message, channelId, imageUrl) {
     }
 
     const attachment = new MessageAttachment(imageUrl);
-    
-    await ch.send({ content: `> Olá @everyone\n\n ${mensagemModificada}`, files: [attachment] })
+
+    await ch.send({ content: `> Olá @everyone\n ${mensagemModificada ? "\n" + mensagemModificada : ""}`, files: [attachment] })
       .then((message) => {
         logger.info("DS MESSAGE", `Message '${message}', send on channel ${ch}.`);
         res = { message: true, status: `Message '${message}', send on channel ${ch}.` };
