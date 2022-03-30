@@ -1,5 +1,5 @@
 const { Client, Intents, MessageActionRow, MessageButton, Interaction, MessageAttachment } = require("discord.js");
-const { userMention } = require("@discordjs/builders");
+const { userMention, roleMention } = require("@discordjs/builders");
 const logger = require("npmlog");
 
 const emojiAniversario = '<a:niver:908728918767439903>';
@@ -95,6 +95,16 @@ async function sendMessageEndomarketing(message, channelId) {
       mensagemModificada = mensagemModificada.replace(retirado[0], mentionUser)
 
       retirado = regex.exec(mensagemModificada);
+    }
+
+    var mentionRole;
+    var regexRole = /(\<@@)(\d+)(\>)/;
+    var retiradoRole = regexRole.exec(mensagemModificada);
+
+    while (retiradoRole) {
+      mentionRole = roleMention(retiradoRole[2]);
+      mensagemModificada = mensagemModificada.replace(retiradoRole[0], mentionRole)
+      var retiradoRole = regexRole.exec(mensagemModificada);
     }
 
     await ch.send({ content: `> @everyone\n> ${mensagemModificada}` })
